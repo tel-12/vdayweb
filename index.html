@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Heart's Day!</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
+    <style>
+        :root {
+            --primary-pink: #ff758c;
+            --accent-pink: #e91e63;
+            --soft-white: #fff8f0;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'arial narrow', sans-serif;
+            font-style: italic;
+            background: linear-gradient(135deg, #ff758c, #ff7eb3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden; 
+        }
+
+        .bg-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .heart-float {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.6);
+            animation: float 6s linear infinite;
+            font-size: 20px;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        .container {
+            width: 90%;
+            max-width: 500px;
+            height: 600px;
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            position: relative;
+            z-index: 10;
+            overflow: hidden;
+            border: 8px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .section {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            padding: 30px;
+            box-sizing: border-box;
+            opacity: 0;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            text-align: center;
+        }
+
+        .active {
+            opacity: 1;
+            display: flex;
+            animation: fadeIn 0.8s forwards;
+        }
+
+        @keyframes fadeIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        h1 {
+            color: var(--accent-pink);
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+
+        .letter-content {
+            font-size: 1.05rem;
+            line-height: 1.6;
+            color: #444;
+            text-align: justify;
+            background: rgba(255, 240, 245, 0.5);
+            padding: 15px;
+            border-radius: 15px;
+            overflow-y: auto;
+            max-height: 350px;
+        }
+
+        .letter-content::-webkit-scrollbar {
+            width: 5px;
+        }
+        .letter-content::-webkit-scrollbar-thumb {
+            background: var(--primary-pink);
+            border-radius: 10px;
+        }
+
+        .btn-next, .choice-btn {
+            margin-top: 20px;
+            padding: 12px 25px;
+            background: var(--accent-pink);
+            border: none;
+            color: white;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(233, 30, 99, 0.3);
+            transition: 0.3s;
+        }
+
+        .btn-next:hover, .choice-btn:hover {
+            transform: scale(1.1);
+            background: #c2185b;
+        }
+
+        .btn-no {
+            background: #999 !important;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            position: relative;
+            transition: 0.2s ease;
+        }
+
+        .carousel {
+            width: 100%;
+            height: 300px;
+            position: relative;
+            margin: 15px 0;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .slides {
+            display: flex;
+            height: 100%;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .slides img {
+            min-width: 100%;
+            object-fit: contain;
+        }
+
+        .nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.8);
+            border: none;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            color: var(--accent-pink);
+        }
+
+        .prev { left: 10px; }
+        .next { right: 10px; }
+
+        #yesResponse {
+            display: none;
+            margin-top: 20px;
+            animation: fadeIn 0.5s forwards;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="bg-hearts" id="bg-hearts"></div>
+
+    <div class="container">
+        <div class="section active" id="sec-1">
+            <h1>Happy Heart's Day, Charlize! <33</h1>
+            <p>flowers for youu >.< !!</p>
+            <img src="catwflowers.jpg" style="width: 200px; border-radius: 20px; margin: 15px 0; object-fit: contain;">
+            <button class="btn-next" onclick="nextSection()">open message <i class="fas fa-envelope-open-heart"></i></button>
+        </div>
+
+        <div class="section" id="sec-2">
+            <div class="letter-content">
+                hellooo bossing!! happy valentine's dayy!! i miss uuu! i hope you're doing well right now. i guess you have classes today or hanging out with your friends— enjoy kayoo!! i'm a bit embarrassed that i can't take u out today TT. i'm in my self development era (char broke lang naman HAHAHAHAHA), pero seriously, i'm fixing myself; gusto ko ayos ako kapag nakita kita. i'm earning, and by then, i can take you out (◍•ᴗ•◍)❤. for now, have these virtual flowers hehe, and this website that i made; it's simple tho, i can't make complex websites pa, i'm still learning, i hope you like it ^^. life is tough, i hope it is kinder to you. i have things that i want to say in person, it's different kasi kapag kaharap kita (tapos matatameme sa personal?? HAHAHAHA), pero this time i will communicate. need pang mag-align lahat ng stars para makapagkita tayo TT, but yeah, i can wait. i'll ask you sometime. keep being amazing, i know you are, in everything you do. keep doing the things you love. don't ever think na you owe me something ha, you don't, i'm doing all of this because i love you and i care for you. i will never not care for you and i will never not love you. take care always, bossing!! mahal kita palagi, Charlize!! <33
+            </div>
+            <button class="btn-next" onclick="nextSection()">see more <i class="fas fa-arrow-right"></i></button>
+        </div>
+
+        <div class="section" id="sec-3">
+            <h1 style="font-size: 1.2rem;">i have some lyrics here that pretty much describe all of this (tatlo 'yan, baka lang hindi mo mapansin 'yung button hehe)</h1>
+            <div class="carousel">
+                <div class="slides" id="slideTrack">
+                    <img src="itisyft.jpg">
+                    <img src="sweet-creature.jpg">
+                    <img src="always.jpg">
+                </div>
+                <button class="nav-btn prev" onclick="moveSlide(-1)"><i class="fas fa-chevron-left"></i></button>
+                <button class="nav-btn next" onclick="moveSlide(1)"><i class="fas fa-chevron-right"></i></button>
+            </div>
+            <button class="btn-next" onclick="nextSection()">next</button>
+        </div>
+
+        <div class="section" id="sec-4">
+            <h1>did you like it?</h1>
+            <p>i hope it made you smile! ^^</p>
+            
+            <div id="button-container" style="display: flex; gap: 20px; justify-content: center; position: relative; width: 100%; height: 60px; align-items: center;">
+                <button class="choice-btn" onclick="sayYes()">yes!</button>
+                <button class="choice-btn btn-no" id="noBtn" onmouseover="dodgeNo()">no</button>
+            </div>
+
+            <div id="yesResponse">
+                <p style="color: var(--accent-pink); font-weight: bold; font-size: 1.1rem; line-height: 1.4;">
+                    yeyy! i'm glad you liked it. <br> i’ll ask you out when the stars finally align (˶˃ ᵕ ˂˶)
+                </p>
+                <button class="btn-next" onclick="nextSection()">next <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </div>
+
+        <div class="section" id="sec-5">
+            <img src="catwflowers.jpg" style="width: 150px; border-radius: 20px; margin-bottom: 15px; object-fit: contain;">
+            <h1>thank you for being you, Charlize</h1>
+            <p style="padding: 0 20px;">kahit hindi valentine's day, i choose and love you every day <33</p>
+            <button class="btn-next" onclick="restart()">restart <i class="fas fa-redo"></i></button>
+        </div>
+    </div>
+
+<script>
+    function sendNotification(eventType) {
+    fetch("https://formspree.io/f/mlgwjoja", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            event: eventType,
+            timestamp: new Date().toLocaleString(),
+            userAgent: navigator.userAgent
+        })
+    });
+}
+
+    let currentSection = 0;
+    const sections = document.querySelectorAll('.section');
+
+    function nextSection() {
+        sections[currentSection].classList.remove('active');
+        currentSection = (currentSection + 1) % sections.length;
+        sections[currentSection].classList.add('active');
+
+        
+        if(currentSection === 4) {
+            triggerConfetti();
+        }
+    }
+
+    function restart() {
+        
+        document.getElementById('yesResponse').style.display = 'none';
+        document.getElementById('button-container').style.display = 'flex';
+        const noBtn = document.getElementById('noBtn');
+        noBtn.style.transform = 'translate(0, 0)';
+        
+        
+        sections[currentSection].classList.remove('active');
+        currentSection = 0;
+        sections[currentSection].classList.add('active');
+    }
+
+   
+    function sayYes() {
+    document.getElementById('yesResponse').style.display = 'block';
+    document.getElementById('button-container').style.display = 'none';
+    triggerConfetti();
+
+    sendNotification("nagyes si bossing<33");
+}
+
+    
+    function dodgeNo() {
+        const noBtn = document.getElementById('noBtn');
+
+        const x = Math.random() * 140 - 70; 
+        const y = Math.random() * 100 - 50; 
+        noBtn.style.transform = `translate(${x}px, ${y}px)`;
+    }
+
+    function triggerConfetti() {
+        confetti({
+            particleCount: 150,
+            spread: 70,
+            origin: { y: 0.6 },
+            colors: ['#ff758c', '#e91e63', '#ffffff']
+        });
+    }
+
+   
+    let slideIndex = 0;
+    function moveSlide(step) {
+        const track = document.getElementById('slideTrack');
+        const totalSlides = track.children.length;
+        slideIndex = (slideIndex + step + totalSlides) % totalSlides;
+        track.style.transform = `translateX(-${slideIndex * 100}%)`;
+    }
+
+  
+    function createHeart() {
+        const heart = document.createElement('i');
+        heart.classList.add('fas', 'fa-heart', 'heart-float');
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.animationDuration = (Math.random() * 3 + 3) + "s";
+        heart.style.opacity = Math.random();
+        heart.style.fontSize = (Math.random() * 20 + 10) + "px";
+        
+        document.getElementById('bg-hearts').appendChild(heart);
+        setTimeout(() => { heart.remove(); }, 6000);
+    }
+    setInterval(createHeart, 300);
+
+    window.addEventListener("load", function() {
+    sendNotification("inopen na ni bossing");
+});
+
+
+</script>
+
+</body>
+</html>
